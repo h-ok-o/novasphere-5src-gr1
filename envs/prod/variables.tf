@@ -47,3 +47,15 @@ variable "generate_inventory" {
   type        = bool
   default     = true
 }
+
+variable "instance_profile_name" {
+  description = "Profil d'instance des serveurs web. Learner Lab : LabInstanceProfile, precree (creation de roles IAM refusee)."
+  type        = string
+  default     = "LabInstanceProfile"
+}
+
+variable "vpc_cidr" {
+  description = "CIDR du VPC de l'environnement"
+  type        = string
+  default     = "10.1.0.0/16"
+}
