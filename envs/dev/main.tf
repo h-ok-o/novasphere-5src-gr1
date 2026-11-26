@@ -22,7 +22,7 @@ locals {
 
 module "web" {
   # TODO(Julien): remplacer par le repo/tag du module web
-  source = "../module"
+  source = "git::https://github.com/h-ok-o/terraform-aws-ec2.git?ref=v1.0.1"
 
   environment           = var.environment
   vpc_id                = module.vpc.vpc_id
