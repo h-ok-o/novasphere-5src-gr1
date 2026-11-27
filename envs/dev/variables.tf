@@ -41,3 +41,9 @@ variable "instance_profile_name" {
   type        = string
   default     = "LabInstanceProfile"
 }
+
+variable "vpc_cidr" {
+  description = "CIDR du VPC de l'environnement"
+  type        = string
+  default     = "10.0.0.0/16"
+}
