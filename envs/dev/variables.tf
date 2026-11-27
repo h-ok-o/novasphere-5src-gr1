@@ -20,19 +20,13 @@ variable "instance_type" {
   default     = "t3.micro"
 }
 
-variable "ssh_public_key_path" {
-  description = "Chemin vers la cle publique SSH a deployer sur l'instance"
-  type        = string
-  default     = "~/.ssh/novasphere.pub"
-}
-
 variable "environment" {
   description = "dev ou prod"
   type        = string
 
   validation {
-    condition     = contains(["dev", "prod"], var.environment)
-    error_message = "environment doit valoir dev ou prod."
+    condition     = var.environment == "dev"
+    error_message = "Dans envs/dev, environment doit valoir dev."
   }
 }
 
@@ -46,4 +40,27 @@ variable "vpc_cidr" {
   description = "CIDR du VPC de l'environnement"
   type        = string
   default     = "10.0.0.0/16"
+}
+
+variable "db_password" {
+  description = "Mot de passe applicatif reçu uniquement à l'apply via TF_VAR_db_password."
+  type        = string
+  sensitive   = true
+  ephemeral   = true
+
+  validation {
+    condition     = length(var.db_password) >= 16
+    error_message = "Le mot de passe applicatif doit contenir au moins 16 caractères."
+  }
+}
+
+variable "db_password_version" {
+  description = "Compteur à incrémenter à chaque rotation du secret (DB_PASSWORD_VERSION)."
+  type        = number
+  default     = 1
+
+  validation {
+    condition     = var.db_password_version >= 1 && floor(var.db_password_version) == var.db_password_version
+    error_message = "db_password_version doit être un entier positif."
+  }
 }
