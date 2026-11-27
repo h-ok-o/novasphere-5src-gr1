@@ -16,23 +16,23 @@ data "aws_ami" "al2023" {
 
 locals {
   # Un secret par environnement : /novasphere/dev/... ou /novasphere/prod/...
-  # Le secret est stocké dans Parameter Store par secrets.tf.
-  secret_path = "/novasphere/${var.environment}/db_password"
+  # Le secret lui-même est écrit par secrets.tf (partie de Soratha).
+  secret_path = "/novasphere/${var.environment}/calendar-api-key"
 }
 
 module "web" {
-  source = "../../modules/ec2-server"
+  # TODO(Julien): remplacer par le repo/tag du module web
+  source = "../module"
 
   environment           = var.environment
   vpc_id                = module.vpc.vpc_id
   subnet_ids            = module.vpc.public_subnets
   ami_id                = data.aws_ami.al2023.id
-  root_device_name      = data.aws_ami.al2023.root_device_name
-  aws_region            = var.aws_region
   instance_type         = var.instance_type
   instance_profile_name = var.instance_profile_name
   secret_parameter_path = local.secret_path
-  secret_version        = var.db_password_version
 
-  depends_on = [aws_ssm_parameter.db_password]
+  # A activer quand secrets.tf existe : le secret doit exister avant
+  # que les instances démarrent.
+  # depends_on = [aws_ssm_parameter.app_secret]
 }
