@@ -9,6 +9,8 @@ plan.txt
 *.tfvars.json
 crash.log
 crash.*.log
+*:Zone.Identifier
+*.terraform.lock.hcl
 
 # Ansible : inventaires generes et secrets
 ansible/inventory*.ini
